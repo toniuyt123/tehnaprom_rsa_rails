@@ -10,8 +10,10 @@ class MessagesController < ApplicationController
   # GET /messages/1
   # GET /messages/1.json
   def show
-	msg = Message.find_by id: params[:id], rid: params[:rid]
-	render json: {'msg' => msg.content}
+	msg = Message.find_by id: params[:mid], rid: params[:id]
+	respond_to do |format|
+		format.json {render json: {'msg' => msg.content}}
+	end
   end
 
   # GET /messages/new
@@ -65,10 +67,9 @@ class MessagesController < ApplicationController
     end
   end
 
-  private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_message
-      @message = Message.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
