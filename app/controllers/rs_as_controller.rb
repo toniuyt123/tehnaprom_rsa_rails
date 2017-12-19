@@ -12,7 +12,7 @@ class RsAsController < ApplicationController
   # GET /rsas/1.json
   def show
 	rsa = Rsa.find_by id: params[:id]
-	render json {'n' => rsa.n, 'e' => rsa.e, 'd' => rsa.d }
+	render.json: {'n' => rsa.n, 'e' => rsa.e, 'd' => rsa.d }
   end
 
   # GET /rsas/new
@@ -28,7 +28,7 @@ class RsAsController < ApplicationController
   # POST /rsas.json
   def create
 	if(params.has_key?(:n) && params.has_key?(:e) && params.has_key?(:d))
-		@rsa = Rsa.new(n: params[:n], e: params[:e], d: params[:d])
+		@rsa = Rsa.new({n: params[:n], e: params[:e], d: params[:d]})
 	else
 		keys = Array.new
 		range = 1000
@@ -57,12 +57,12 @@ class RsAsController < ApplicationController
 		end
 		keys[2] = d
 
-		@rsa = Rsa.new(n: keys[0], e: keys[1], d: keys[2])
+		@rsa = Rsa.new({n: keys[0], e: keys[1], d: keys[2]})
 	end
 
 	respond_to do |format|
 		if @rsa.save
-			format.json { render json {'id' => @rsa.id} }
+			format.json: { render json {'id' => @rsa.id} }
 		end
 	end
   end
@@ -94,7 +94,6 @@ class RsAsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rsa
-      @rsa = Rsa.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
