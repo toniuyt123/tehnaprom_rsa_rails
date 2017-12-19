@@ -14,7 +14,7 @@ class RsAsController < ApplicationController
   # GET /rsas/1.json
   def show
 	rsa = Rsa.find_by id: params[:id]
-	render.json: {'n' => rsa.n, 'e' => rsa.e, 'd' => rsa.d }
+	render json: {'n' => rsa.n, 'e' => rsa.e, 'd' => rsa.d }
   end
 
   # GET /rsas/new
@@ -62,10 +62,8 @@ class RsAsController < ApplicationController
 		@rsa = Rsa.new({n: keys[0], e: keys[1], d: keys[2]})
 	end
 
-	respond_to do |format|
-		if @rsa.save
-			format.json: { render json {'id' => @rsa.id} }
-		end
+	if @rsa.save
+		render json: {'id' => @rsa.id}
 	end
   end
 
