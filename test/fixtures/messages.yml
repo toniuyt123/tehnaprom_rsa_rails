@@ -2,8 +2,8 @@
 
 one:
   content: MyString
-  id: 1
+  rid: 1
 
 two:
   content: MyString
-  id: 1
+  rid: 1

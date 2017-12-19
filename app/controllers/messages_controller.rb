@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
   # GET /messages/1
   # GET /messages/1.json
   def show
-	msg = Message.find_by id: params[:id], mid: params[:mid]
+	msg = Message.find_by id: params[:id], rid: params[:rid]
 	render.json: {'msg' => msg.content}
   end
 
@@ -28,9 +28,9 @@ class MessagesController < ApplicationController
     rsa = Rsa.find_by id: params[:id]
 
 	encrypted = (params[:message].chars.map {|c| c.ord ** @e % @n}).join(",")
-	msg = Message.new({id: rsa.id, content: encrypted})
+	msg = Message.new({rid: rsa.id, content: encrypted})
 	if(msg.save)
-		render.json: {'mid' => msg.id}
+		render.json: {'id' => msg.id}
 	end
   end
 
