@@ -30,7 +30,7 @@ class RsAsController < ApplicationController
   # POST /rsas.json
   def create
 	if(params.has_key?(:n) && params.has_key?(:e) && params.has_key?(:d))
-		@rsa = Rsa.new(n: params[:n], e: params[:e], d: params[:d])
+		@rsa = Rsa.new({n: params[:n], e: params[:e], d: params[:d]})
 	else
 		keys = Array.new
 		range = 1000
@@ -59,7 +59,7 @@ class RsAsController < ApplicationController
 		end
 		keys[2] = d
 
-		@rsa = Rsa.new(n: keys[0], e: keys[1], d: keys[2])
+		@rsa = Rsa.new({n: keys[0], e: keys[1], d: keys[2]})
 	end
 
 	respond_to do |format|
