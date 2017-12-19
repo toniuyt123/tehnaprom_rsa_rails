@@ -1,3 +1,5 @@
+require 'prime'
+
 class RsAsController < ApplicationController
   before_action :set_rsa, only: [:show, :edit, :update, :destroy]
 	protect_from_forgery with: :null_session
