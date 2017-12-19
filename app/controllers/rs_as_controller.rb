@@ -1,5 +1,6 @@
 class RsAsController < ApplicationController
   before_action :set_rsa, only: [:show, :edit, :update, :destroy]
+	protect_from_forgery with: :null_session
 
   # GET /rsas
   # GET /rsas.json
@@ -10,6 +11,8 @@ class RsAsController < ApplicationController
   # GET /rsas/1
   # GET /rsas/1.json
   def show
+	rsa = Rsa.find_by id: params[:id]
+	render json {'n' => rsa.n, 'e' => rsa.e, 'd' => rsa.d }
   end
 
   # GET /rsas/new
@@ -24,17 +27,44 @@ class RsAsController < ApplicationController
   # POST /rsas
   # POST /rsas.json
   def create
-    @rsa = Rsa.new(rsa_params)
+	if(params.has_key?(:n) && params.has_key?(:e) && params.has_key?(:d))
+		@rsa = Rsa.new(n: params[:n], e: params[:e], d: params[:d])
+	else
+		keys = Array.new
+		range = 1000
+		p = rand(range)
+		q = rand(range)
+		while !Prime.prime?(p)
+			p = rand(range)
+		end		
+		while !Prime.prime?(q)
+			q = rand(range)
+		end
 
-    respond_to do |format|
-      if @rsa.save
-        format.html { redirect_to @rsa, notice: 'Rsa was successfully created.' }
-        format.json { render :show, status: :created, location: @rsa }
-      else
-        format.html { render :new }
-        format.json { render json: @rsa.errors, status: :unprocessable_entity }
-      end
-    end
+		n = p * q
+		keys[0] = n
+		lcm = (p - 1).lcm(q - 1)
+
+		e = rand(lcm)
+		while e.gcd(lcm) != 1
+			e = rand(lcm)
+		end
+		keys[1] = e
+
+		d = 1
+		while ((d * e)%lcm != 1)
+			d = d + 1
+		end
+		keys[2] = d
+
+		@rsa = Rsa.new(n: keys[0], e: keys[1], d: keys[2])
+	end
+
+	respond_to do |format|
+		if @rsa.save
+			format.json { render json {'id' => @rsa.id} }
+		end
+	end
   end
 
   # PATCH/PUT /rsas/1

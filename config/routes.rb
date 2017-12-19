@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
-  resources :rsas
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :messages
+	resources :rs_as
+	  
+	post '/rsa', to: 'rs_as#create'
+	get '/rsa/:id', to: 'rs_as#show'
+
+	post '/rsa/:id/encrypt_messages', to: 'messages#create'
+	get '/rsa/:id/encrypt_messages/:mid', to: 'messages#show'
+
+	post '/rsa/:id/decrypt_messages', to: 'messages#decrypt'
 end
