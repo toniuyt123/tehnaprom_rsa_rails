@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
+  resources :rsas, only: [:show]
   resources :messages
-	resources :rs_as
 	  
 	post '/rsas', to: 'rs_as#create'
 	get '/rsas/:id', to: 'rs_as#show'
